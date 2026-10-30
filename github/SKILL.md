@@ -53,6 +53,10 @@ board's number (in its URL: `github.com/orgs/LOGIN/projects/P`). Status names
 match regardless of case. `move` adds the issue or pull request to the board
 first when it is not on it, and says so.
 
+A board listing shows only the items the user's token can see. With a token
+limited to some repositories, items from other repositories are left out
+without a mark, so the list may be shorter than the board on GitHub.
+
 Examples:
 
 ```bash
