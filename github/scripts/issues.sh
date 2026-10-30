@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # GitHub issues through AutoByteus: list, read, create, comment.
 set -euo pipefail
+# shellcheck source=lib.sh
 . "$(cd "$(dirname "$0")" && pwd)/lib.sh"
 
 GH_USAGE="usage:

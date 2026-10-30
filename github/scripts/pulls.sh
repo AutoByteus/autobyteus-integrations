@@ -3,6 +3,7 @@
 # Push the branch first with git, using the https://github.com/OWNER/REPO.git
 # URL (AutoByteus redirects it); an SSH remote does not go through AutoByteus.
 set -euo pipefail
+# shellcheck source=lib.sh
 . "$(cd "$(dirname "$0")" && pwd)/lib.sh"
 
 GH_USAGE="usage:

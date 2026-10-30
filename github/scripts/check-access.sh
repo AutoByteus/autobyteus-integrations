@@ -2,6 +2,7 @@
 # Checks this run's GitHub access through AutoByteus.
 # Usage: check-access.sh
 set -euo pipefail
+# shellcheck source=lib.sh
 . "$(cd "$(dirname "$0")" && pwd)/lib.sh"
 
 GH_USAGE="usage: check-access.sh"

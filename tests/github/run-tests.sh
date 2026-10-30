@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Single-quoted $(...) and backticks below are test text and jq, not shell.
+# shellcheck disable=SC2016
 # Deterministic tests of the GitHub integration's scripts against a local
 # stand-in for the AutoByteus proxy (tests/github/fake-api.py). No network,
 # no real token.
@@ -381,7 +383,7 @@ routes "$(jq -n --argjson board "$BOARD" '[
    body: {data: {addProjectV2ItemById: {item: {id: "PVTI_new"}}}}},
   {method: "POST", path: "/graphql", match: "updateProjectV2ItemFieldValue", status: 200,
    body: {data: {updateProjectV2ItemFieldValue: {projectV2Item: {id: "PVTI_new"}}}}}]')"
-run "$scripts/board.sh" move o/r#4 --owner o --number 1 --status done
+run "$scripts/board.sh" move o/r#4 --owner o --number 1 --status "done"
 expect_exit 0
 expect_out_exact "added o/r#4 to the board; moved to Done"
 expect_request_body 3 '.variables == {project: "PVT_1", content: "I_4"}'

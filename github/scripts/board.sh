@@ -3,6 +3,7 @@
 # shellcheck disable=SC2016
 # GitHub Projects boards through AutoByteus (GraphQL): list items, move an item.
 set -euo pipefail
+# shellcheck source=lib.sh
 . "$(cd "$(dirname "$0")" && pwd)/lib.sh"
 
 GH_USAGE="usage:
