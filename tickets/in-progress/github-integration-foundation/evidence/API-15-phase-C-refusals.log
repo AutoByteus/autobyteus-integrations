@@ -1,0 +1,49 @@
+# Case: API-15
+# Commit tested: f9d7f02 (scripts unchanged since 3192aec)
+# Environment: ENV-2: isolated AutoByteus 1.5.11-beta.5 (installed release, /Applications/AutoByteus.app; instance iso-62788-45ad, own data root and vault), Codex runtime (codex-cli 0.166.0, gpt-5.6-luna, auto-execute, throwaway CODEX_HOME), skill github-integration from the worktree (local skill source), GitHub test token connected once by connectGitHubIntegration; macOS 26.5, run shell bash 3.2.57; target AutoByteus/autobyteus-integrations-test and board AutoByteus #1
+# Date: 2026-10-30 (UTC times inside)
+# Command or steps: agent turn: driver phase C
+# The run pass is masked as rp_<pass>; the token never appears.
+
+# driver phase C, 2026-10-30T13:23:44Z, shell: bash 3.2.57(1)-release, Darwin arm64
+# AUTOBYTEUS_GITHUB_API_URL=http://127.0.0.1:62846/r/rp_<pass>/github/api
+# GIT_CONFIG_COUNT=1 GIT_TERMINAL_PROMPT=0
+# GIT_CONFIG_KEY_0=url.http://127.0.0.1:62846/r/rp_<pass>/github/git/.insteadOf GIT_CONFIG_VALUE_0=https://github.com/
+
+=== C01 issues read, private repo outside the token's list (expect 404, exit 4)
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/issues.sh read AutoByteus/autobyteus-server#6
+--- exit: 4
+--- stdout:
+--- stderr:
+GitHub answered HTTP 404 for GET /repos/AutoByteus/autobyteus-server/issues/6: Not Found
+Next: the token may lack a permission or the repository is not in its list.
+
+=== C02 issues comment, public repo outside the token's list (expect 403, exit 4)
+$ printf '%s' <stdin below> | /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/issues.sh comment AutoByteus/autobyteus-workspace#2 --body-file -
+--- stdin:
+Should be refused.
+--- exit: 4
+--- stdout:
+--- stderr:
+GitHub answered HTTP 403 for POST /repos/AutoByteus/autobyteus-workspace/issues/2/comments: Resource not accessible by personal access token
+Next: the token may lack a permission or the repository is not in its list.
+
+=== C03 board items, user-owned board (expect GraphQL errors, exit 4)
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner ryan-zheng-teki --number 1
+--- exit: 4
+--- stdout:
+--- stderr:
+GitHub refused the GraphQL request:
+- Could not resolve to a ProjectV2 with the number 1. (NOT_FOUND)
+Next: the token may lack a permission or the repository is not in its list.
+
+=== C04 board items, org board number that does not exist (expect exit 4)
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 999
+--- exit: 4
+--- stdout:
+--- stderr:
+GitHub refused the GraphQL request:
+- Could not resolve to a ProjectV2 with the number 999. (NOT_FOUND)
+Next: the token may lack a permission or the repository is not in its list.
+
+# host check: comments on AutoByteus/autobyteus-workspace#2 containing 'Should be refused' = 0 (see API-11-17-host-readback.log)

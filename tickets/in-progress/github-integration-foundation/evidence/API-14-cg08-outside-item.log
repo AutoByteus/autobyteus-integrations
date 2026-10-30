@@ -1,0 +1,277 @@
+# Case: API-14
+# Commit tested: f9d7f02 (scripts unchanged since 3192aec)
+# Environment: ENV-2: isolated AutoByteus 1.5.11-beta.5 (installed release, /Applications/AutoByteus.app; instance iso-62788-45ad, own data root and vault), Codex runtime (codex-cli 0.166.0, gpt-5.6-luna, auto-execute, throwaway CODEX_HOME), skill github-integration from the worktree (local skill source), GitHub test token connected once by connectGitHubIntegration; macOS 26.5, run shell bash 3.2.57; target AutoByteus/autobyteus-integrations-test and board AutoByteus #1
+# Date: 2026-10-30 (UTC times inside)
+# Command or steps: CG-08 measurement, in order: F (token cannot add a private outside issue), F2 (issue #4 created and put on the board), host transfer #4 -> AutoByteus/autobyteus-server#9, B and B2 (45 s), B3 (1 min 47 s), B4 (6 min 5 s), host transfer back -> #5, G (control: #5 inside the list, visible), host transfer #5 -> autobyteus-server#10, B5 (91 s), host transfer back -> #6, X (cleanup deletes item ...ExsGQ)
+# The run pass is masked as rp_<pass>; the token never appears.
+
+# driver phase F, 2026-10-30T13:21:53Z, shell: bash 3.2.57(1)-release, Darwin arm64
+# AUTOBYTEUS_GITHUB_API_URL=http://127.0.0.1:62846/r/rp_<pass>/github/api
+# GIT_CONFIG_COUNT=1 GIT_TERMINAL_PROMPT=0
+# GIT_CONFIG_KEY_0=url.http://127.0.0.1:62846/r/rp_<pass>/github/git/.insteadOf GIT_CONFIG_VALUE_0=https://github.com/
+
+=== F01 add outside item by node ID (fixture, raw GraphQL)
+$ curl -sS -X POST -H Content-Type: application/json --data {
+  "query": "mutation($p: ID!, $c: ID!) { addProjectV2ItemById(input: {projectId: $p, contentId: $c}) { item { id type } } }",
+  "variables": {
+    "p": "PVT_kwDOB-mU1M4BpcaH",
+    "c": "I_kwDONPysk86kDgoP"
+  }
+} http://127.0.0.1:62846/r/rp_<pass>/github/api/graphql
+--- exit: 0
+--- stdout:
+{"data":{"addProjectV2ItemById":null},"errors":[{"type":"NOT_FOUND","path":["addProjectV2ItemById"],"locations":[{"line":1,"column":30}],"message":"Could not resolve to a node with the global id of 'I_kwDONPysk86kDgoP'."}]}
+--- stderr:
+
+
+# driver phase F2, 2026-10-30T13:22:29Z, shell: bash 3.2.57(1)-release, Darwin arm64
+# AUTOBYTEUS_GITHUB_API_URL=http://127.0.0.1:62846/r/rp_<pass>/github/api
+# GIT_CONFIG_COUNT=1 GIT_TERMINAL_PROMPT=0
+# GIT_CONFIG_KEY_0=url.http://127.0.0.1:62846/r/rp_<pass>/github/git/.insteadOf GIT_CONFIG_VALUE_0=https://github.com/
+
+=== F2-01 issues create (issue C)
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/issues.sh create AutoByteus/autobyteus-integrations-test --title Live check 20261030132042: issue C (CG-08 fixture) --body-file /tmp/gh-int-live/out/F2/body-c.md
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#4 https://github.com/AutoByteus/autobyteus-integrations-test/issues/4
+--- stderr:
+
+=== F2-02 board move C --status todo
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh move AutoByteus/autobyteus-integrations-test#4 --owner AutoByteus --number 1 --status todo
+--- exit: 0
+--- stdout:
+added AutoByteus/autobyteus-integrations-test#4 to the board; moved to Todo
+--- stderr:
+
+
+######## host
+# host: gh issue transfer 4 AutoByteus/autobyteus-server -R AutoByteus/autobyteus-integrations-test (2026-10-30T13:22:40Z)
+https://github.com/AutoByteus/autobyteus-server/issues/9
+exit=0
+# host: projectItems.totalCount of AutoByteus/autobyteus-server#9 (user's gh login, no read:project scope) = 1
+
+######## phase B
+# driver phase B, 2026-10-30T13:22:54Z, shell: bash 3.2.57(1)-release, Darwin arm64
+# AUTOBYTEUS_GITHUB_API_URL=http://127.0.0.1:62846/r/rp_<pass>/github/api
+# GIT_CONFIG_COUNT=1 GIT_TERMINAL_PROMPT=0
+# GIT_CONFIG_KEY_0=url.http://127.0.0.1:62846/r/rp_<pass>/github/git/.insteadOf GIT_CONFIG_VALUE_0=https://github.com/
+
+=== B01 raw GraphQL board read-back (not board.sh)
+$ raw_board
+--- exit: 0
+--- stdout:
+{"data":{"organization":{"projectV2":{"title":"AutoByteus Integrations Test Board","items":{"nodes":[{"id":"PVTI_lADOB-mU1M4BpcaHzhExqmw","type":"ISSUE","isArchived":false,"content":{"__typename":"Issue","number":3,"title":"Live check 20261030132042: issue B (board)","repository":{"nameWithOwner":"AutoByteus/autobyteus-integrations-test"}},"fieldValueByName":{"name":"Done"}},{"id":"PVTI_lADOB-mU1M4BpcaHzhExqwM","type":"PULL_REQUEST","isArchived":false,"content":{"__typename":"PullRequest","number":2,"title":"Live check 20261030132042: PR","repository":{"nameWithOwner":"AutoByteus/autobyteus-integrations-test"}},"fieldValueByName":{"name":"Todo"}}]}}}}}
+--- stderr:
+
+=== B02 board items
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 1
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#3 [Done] Live check 20261030132042: issue B (board)
+AutoByteus/autobyteus-integrations-test#2 [Todo] Live check 20261030132042: PR
+--- stderr:
+
+=== B03 board items --status todo
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 1 --status todo
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#2 [Todo] Live check 20261030132042: PR
+--- stderr:
+
+
+######## phase B2
+# driver phase B2, 2026-10-30T13:23:27Z, shell: bash 3.2.57(1)-release, Darwin arm64
+# AUTOBYTEUS_GITHUB_API_URL=http://127.0.0.1:62846/r/rp_<pass>/github/api
+# GIT_CONFIG_COUNT=1 GIT_TERMINAL_PROMPT=0
+# GIT_CONFIG_KEY_0=url.http://127.0.0.1:62846/r/rp_<pass>/github/git/.insteadOf GIT_CONFIG_VALUE_0=https://github.com/
+
+=== B2-01 raw GraphQL items totalCount + nodes
+$ curl -sS -X POST -H Content-Type: application/json --data {
+  "query": "query { organization(login: \"AutoByteus\") { projectV2(number: 1) { items(first: 100) { totalCount nodes { id type content { __typename ... on Issue { number repository { nameWithOwner } } ... on PullRequest { number } } } } } } }"
+} http://127.0.0.1:62846/r/rp_<pass>/github/api/graphql
+--- exit: 0
+--- stdout:
+{"data":{"organization":{"projectV2":{"items":{"totalCount":2,"nodes":[{"id":"PVTI_lADOB-mU1M4BpcaHzhExqmw","type":"ISSUE","content":{"__typename":"Issue","number":3,"repository":{"nameWithOwner":"AutoByteus/autobyteus-integrations-test"}}},{"id":"PVTI_lADOB-mU1M4BpcaHzhExqwM","type":"PULL_REQUEST","content":{"__typename":"PullRequest","number":2}}]}}}}}
+--- stderr:
+
+=== B2-02 board items
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 1
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#3 [Done] Live check 20261030132042: issue B (board)
+AutoByteus/autobyteus-integrations-test#2 [Todo] Live check 20261030132042: PR
+--- stderr:
+
+
+######## phase B3
+# driver phase B2, 2026-10-30T13:24:29Z, shell: bash 3.2.57(1)-release, Darwin arm64
+# AUTOBYTEUS_GITHUB_API_URL=http://127.0.0.1:62846/r/rp_<pass>/github/api
+# GIT_CONFIG_COUNT=1 GIT_TERMINAL_PROMPT=0
+# GIT_CONFIG_KEY_0=url.http://127.0.0.1:62846/r/rp_<pass>/github/git/.insteadOf GIT_CONFIG_VALUE_0=https://github.com/
+
+=== B2-01 raw GraphQL items totalCount + nodes
+$ curl -sS -X POST -H Content-Type: application/json --data {
+  "query": "query { organization(login: \"AutoByteus\") { projectV2(number: 1) { items(first: 100) { totalCount nodes { id type content { __typename ... on Issue { number repository { nameWithOwner } } ... on PullRequest { number } } } } } } }"
+} http://127.0.0.1:62846/r/rp_<pass>/github/api/graphql
+--- exit: 0
+--- stdout:
+{"data":{"organization":{"projectV2":{"items":{"totalCount":2,"nodes":[{"id":"PVTI_lADOB-mU1M4BpcaHzhExqmw","type":"ISSUE","content":{"__typename":"Issue","number":3,"repository":{"nameWithOwner":"AutoByteus/autobyteus-integrations-test"}}},{"id":"PVTI_lADOB-mU1M4BpcaHzhExqwM","type":"PULL_REQUEST","content":{"__typename":"PullRequest","number":2}}]}}}}}
+--- stderr:
+
+=== B2-02 board items
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 1
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#3 [Done] Live check 20261030132042: issue B (board)
+AutoByteus/autobyteus-integrations-test#2 [Todo] Live check 20261030132042: PR
+--- stderr:
+
+
+######## phase B4
+# driver phase B2, 2026-10-30T13:28:51Z, shell: bash 3.2.57(1)-release, Darwin arm64
+# AUTOBYTEUS_GITHUB_API_URL=http://127.0.0.1:62846/r/rp_<pass>/github/api
+# GIT_CONFIG_COUNT=1 GIT_TERMINAL_PROMPT=0
+# GIT_CONFIG_KEY_0=url.http://127.0.0.1:62846/r/rp_<pass>/github/git/.insteadOf GIT_CONFIG_VALUE_0=https://github.com/
+
+=== B2-01 raw GraphQL items totalCount + nodes
+$ curl -sS -X POST -H Content-Type: application/json --data {
+  "query": "query { organization(login: \"AutoByteus\") { projectV2(number: 1) { items(first: 100) { totalCount nodes { id type content { __typename ... on Issue { number repository { nameWithOwner } } ... on PullRequest { number } } } } } } }"
+} http://127.0.0.1:62846/r/rp_<pass>/github/api/graphql
+--- exit: 0
+--- stdout:
+{"data":{"organization":{"projectV2":{"items":{"totalCount":2,"nodes":[{"id":"PVTI_lADOB-mU1M4BpcaHzhExqmw","type":"ISSUE","content":{"__typename":"Issue","number":3,"repository":{"nameWithOwner":"AutoByteus/autobyteus-integrations-test"}}},{"id":"PVTI_lADOB-mU1M4BpcaHzhExqwM","type":"PULL_REQUEST","content":{"__typename":"PullRequest","number":2}}]}}}}}
+--- stderr:
+
+=== B2-02 board items
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 1
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#3 [Done] Live check 20261030132042: issue B (board)
+AutoByteus/autobyteus-integrations-test#2 [Todo] Live check 20261030132042: PR
+--- stderr:
+
+
+######## host
+# host: gh issue transfer 9 AutoByteus/autobyteus-integrations-test -R AutoByteus/autobyteus-server (2026-10-30T13:29:00Z)
+https://github.com/AutoByteus/autobyteus-integrations-test/issues/5
+exit=0
+{"repository":{"issue":{"projectItems":{"totalCount":0},"title":"Live check 20261030132042: issue C (CG-08 fixture)"}}}
+
+######## phase G (control)
+# driver phase G, 2026-10-30T13:29:18Z, shell: bash 3.2.57(1)-release, Darwin arm64
+# AUTOBYTEUS_GITHUB_API_URL=http://127.0.0.1:62846/r/rp_<pass>/github/api
+# GIT_CONFIG_COUNT=1 GIT_TERMINAL_PROMPT=0
+# GIT_CONFIG_KEY_0=url.http://127.0.0.1:62846/r/rp_<pass>/github/git/.insteadOf GIT_CONFIG_VALUE_0=https://github.com/
+
+=== G01 board move AutoByteus/autobyteus-integrations-test#5 --status todo
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh move AutoByteus/autobyteus-integrations-test#5 --owner AutoByteus --number 1 --status todo
+--- exit: 0
+--- stdout:
+moved AutoByteus/autobyteus-integrations-test#5 to Todo
+--- stderr:
+
+=== G02 board items (30 s later)
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 1
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#3 [Done] Live check 20261030132042: issue B (board)
+AutoByteus/autobyteus-integrations-test#2 [Todo] Live check 20261030132042: PR
+AutoByteus/autobyteus-integrations-test#5 [Todo] Live check 20261030132042: issue C (CG-08 fixture)
+--- stderr:
+
+=== G03 raw GraphQL items totalCount + nodes
+$ curl -sS -X POST -H Content-Type: application/json --data {
+  "query": "query { organization(login: \"AutoByteus\") { projectV2(number: 1) { items(first: 100) { totalCount nodes { id type content { __typename ... on Issue { number repository { nameWithOwner } } ... on PullRequest { number } } } } } } }"
+} http://127.0.0.1:62846/r/rp_<pass>/github/api/graphql
+--- exit: 0
+--- stdout:
+{"data":{"organization":{"projectV2":{"items":{"totalCount":3,"nodes":[{"id":"PVTI_lADOB-mU1M4BpcaHzhExqmw","type":"ISSUE","content":{"__typename":"Issue","number":3,"repository":{"nameWithOwner":"AutoByteus/autobyteus-integrations-test"}}},{"id":"PVTI_lADOB-mU1M4BpcaHzhExqwM","type":"PULL_REQUEST","content":{"__typename":"PullRequest","number":2}},{"id":"PVTI_lADOB-mU1M4BpcaHzhExsGQ","type":"ISSUE","content":{"__typename":"Issue","number":5,"repository":{"nameWithOwner":"AutoByteus/autobyteus-integrations-test"}}}]}}}}}
+--- stderr:
+
+
+######## host
+# host: gh issue transfer 5 AutoByteus/autobyteus-server -R AutoByteus/autobyteus-integrations-test (2026-10-30T13:30:04Z)
+https://github.com/AutoByteus/autobyteus-server/issues/10
+exit=0
+
+######## phase B5
+# driver phase B2, 2026-10-30T13:31:37Z, shell: bash 3.2.57(1)-release, Darwin arm64
+# AUTOBYTEUS_GITHUB_API_URL=http://127.0.0.1:62846/r/rp_<pass>/github/api
+# GIT_CONFIG_COUNT=1 GIT_TERMINAL_PROMPT=0
+# GIT_CONFIG_KEY_0=url.http://127.0.0.1:62846/r/rp_<pass>/github/git/.insteadOf GIT_CONFIG_VALUE_0=https://github.com/
+
+=== B2-01 raw GraphQL items totalCount + nodes
+$ curl -sS -X POST -H Content-Type: application/json --data {
+  "query": "query { organization(login: \"AutoByteus\") { projectV2(number: 1) { items(first: 100) { totalCount nodes { id type content { __typename ... on Issue { number repository { nameWithOwner } } ... on PullRequest { number } } } } } } }"
+} http://127.0.0.1:62846/r/rp_<pass>/github/api/graphql
+--- exit: 0
+--- stdout:
+{"data":{"organization":{"projectV2":{"items":{"totalCount":2,"nodes":[{"id":"PVTI_lADOB-mU1M4BpcaHzhExqmw","type":"ISSUE","content":{"__typename":"Issue","number":3,"repository":{"nameWithOwner":"AutoByteus/autobyteus-integrations-test"}}},{"id":"PVTI_lADOB-mU1M4BpcaHzhExqwM","type":"PULL_REQUEST","content":{"__typename":"PullRequest","number":2}}]}}}}}
+--- stderr:
+
+=== B2-02 board items
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 1
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#3 [Done] Live check 20261030132042: issue B (board)
+AutoByteus/autobyteus-integrations-test#2 [Todo] Live check 20261030132042: PR
+--- stderr:
+
+
+######## host
+# host: gh issue transfer 10 AutoByteus/autobyteus-integrations-test -R AutoByteus/autobyteus-server (2026-10-30T13:31:55Z)
+https://github.com/AutoByteus/autobyteus-integrations-test/issues/6
+exit=0
+
+######## phase X (cleanup)
+# driver phase X, 2026-10-30T13:32:04Z, shell: bash 3.2.57(1)-release, Darwin arm64
+# AUTOBYTEUS_GITHUB_API_URL=http://127.0.0.1:62846/r/rp_<pass>/github/api
+# GIT_CONFIG_COUNT=1 GIT_TERMINAL_PROMPT=0
+# GIT_CONFIG_KEY_0=url.http://127.0.0.1:62846/r/rp_<pass>/github/git/.insteadOf GIT_CONFIG_VALUE_0=https://github.com/
+
+=== X delete board item PVTI_lADOB-mU1M4BpcaHzhExqmw
+$ curl -sS -X POST -H Content-Type: application/json --data {
+  "query": "mutation($p: ID!, $i: ID!) { deleteProjectV2Item(input: {projectId: $p, itemId: $i}) { deletedItemId } }",
+  "variables": {
+    "p": "PVT_kwDOB-mU1M4BpcaH",
+    "i": "PVTI_lADOB-mU1M4BpcaHzhExqmw"
+  }
+} http://127.0.0.1:62846/r/rp_<pass>/github/api/graphql
+--- exit: 0
+--- stdout:
+{"data":{"deleteProjectV2Item":{"deletedItemId":"PVTI_lADOB-mU1M4BpcaHzhExqmw"}}}
+--- stderr:
+
+=== X delete board item PVTI_lADOB-mU1M4BpcaHzhExqwM
+$ curl -sS -X POST -H Content-Type: application/json --data {
+  "query": "mutation($p: ID!, $i: ID!) { deleteProjectV2Item(input: {projectId: $p, itemId: $i}) { deletedItemId } }",
+  "variables": {
+    "p": "PVT_kwDOB-mU1M4BpcaH",
+    "i": "PVTI_lADOB-mU1M4BpcaHzhExqwM"
+  }
+} http://127.0.0.1:62846/r/rp_<pass>/github/api/graphql
+--- exit: 0
+--- stdout:
+{"data":{"deleteProjectV2Item":{"deletedItemId":"PVTI_lADOB-mU1M4BpcaHzhExqwM"}}}
+--- stderr:
+
+=== X delete board item PVTI_lADOB-mU1M4BpcaHzhExsGQ
+$ curl -sS -X POST -H Content-Type: application/json --data {
+  "query": "mutation($p: ID!, $i: ID!) { deleteProjectV2Item(input: {projectId: $p, itemId: $i}) { deletedItemId } }",
+  "variables": {
+    "p": "PVT_kwDOB-mU1M4BpcaH",
+    "i": "PVTI_lADOB-mU1M4BpcaHzhExsGQ"
+  }
+} http://127.0.0.1:62846/r/rp_<pass>/github/api/graphql
+--- exit: 0
+--- stdout:
+{"data":{"deleteProjectV2Item":{"deletedItemId":"PVTI_lADOB-mU1M4BpcaHzhExsGQ"}}}
+--- stderr:
+
+=== X raw GraphQL board read-back after cleanup
+$ raw_board
+--- exit: 0
+--- stdout:
+{"data":{"organization":{"projectV2":{"title":"AutoByteus Integrations Test Board","items":{"nodes":[]}}}}}
+--- stderr:
+

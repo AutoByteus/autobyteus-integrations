@@ -1,0 +1,56 @@
+# Case: API-16
+# Commit tested: f9d7f02 (scripts unchanged since 3192aec)
+# Environment: ENV-2: isolated AutoByteus 1.5.11-beta.5 (installed release, /Applications/AutoByteus.app; instance iso-62788-45ad, own data root and vault), Codex runtime (codex-cli 0.166.0, gpt-5.6-luna, auto-execute, throwaway CODEX_HOME), skill github-integration from the worktree (local skill source), GitHub test token connected once by connectGitHubIntegration; macOS 26.5, run shell bash 3.2.57; target AutoByteus/autobyteus-integrations-test and board AutoByteus #1
+# Date: 2026-10-30 (UTC times inside)
+# Command or steps: (a) setGitHubIntegrationAgentAccess([]) while run 'main' is live, agent turn; (b) tick again, agent turn; (c) run of agent gh-int-live-unticked-dc5097 (skill, never ticked), agent turn
+# The run pass is masked as rp_<pass>; the token never appears.
+
+######## (a) after untick: agentDefinitionIds []
+--- user message:
+Run exactly this shell command once, then reply with its full output and exit code:
+
+S=/Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts; $S/check-access.sh; echo "exit=$?"; $S/issues.sh list AutoByteus/autobyteus-integrations-test; echo "exit=$?"
+$ /bin/bash -lc 'S=/Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts; $S/check-access.sh; echo "exit=$?"; $S/issues.sh list AutoByteus/autobyteus-integrations-test; echo "exit=$?"'
+--- exit: 0
+AutoByteus refused GET /user (INTEGRATION_NOT_ALLOWED): This agent has no GitHub access. Allow it on the GitHub card in Settings.
+Next: this agent has no GitHub access in this run: give the agent the integration, then start a new run.
+exit=3
+AutoByteus refused GET /repos/AutoByteus/autobyteus-integrations-test/issues (INTEGRATION_NOT_ALLOWED): This agent has no GitHub access. Allow it on the GitHub card in Settings.
+Next: this agent has no GitHub access in this run: give the agent the integration, then start a new run.
+exit=3
+
+--- agent reply:
+AutoByteus refused GET /user (INTEGRATION_NOT_ALLOWED): This agent has no GitHub access. Allow it on the GitHub card in Settings.
+Next: this agent has no GitHub access in this run: give the agent the integration, then start a new run.
+exit=3
+AutoByteus refused GET /repos/AutoByteus/autobyteus-integrations-test/issues (INTEGRATION_NOT_ALLOWED): This agent has no GitHub access. Allow it on the GitHub card in Settings.
+Next: this agent has no GitHub access in this run: give the agent the integration,
+ then start a new run.
+exit=3
+
+######## (b) after tick again: agentDefinitionIds [gh-int-live-ticked-c8bf8b]
+--- user message:
+Run exactly this shell command once, then reply with its full output and exit code:
+
+/Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/check-access.sh; echo "exit=$?"
+$ /bin/bash -lc '/Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/check-access.sh; echo "exit=$?"'
+--- exit: 0
+GitHub access: connected as @ryan-zheng-teki
+exit=0
+
+--- agent reply:
+GitHub access: connected as @ryan-zheng-teki
+exit=0
+
+######## (c) never-ticked agent
+$ /bin/bash -lc '/Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/check-access.sh; echo "exit=$?"'
+--- exit: 0
+No GitHub access in this run (AUTOBYTEUS_GITHUB_API_URL is not set).
+Next: connect GitHub in AutoByteus and give this agent the GitHub integration, then start a new run. Do not use a token or gh's own login instead.
+exit=3
+
+--- agent reply:
+No GitHub access in this run (AUTOBYTEUS_GITHUB_API_URL is not set).  
+Next: connect GitHub in AutoByteus and give this agent the GitHub integration, then start a new run. Do not use a token or gh's own login instead.  
+exit=3
+

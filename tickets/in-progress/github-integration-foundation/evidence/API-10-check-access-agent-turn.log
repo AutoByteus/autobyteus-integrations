@@ -1,0 +1,20 @@
+# Case: API-10
+# Commit tested: f9d7f02 (scripts unchanged since 3192aec)
+# Environment: ENV-2: isolated AutoByteus 1.5.11-beta.5 (installed release, /Applications/AutoByteus.app; instance iso-62788-45ad, own data root and vault), Codex runtime (codex-cli 0.166.0, gpt-5.6-luna, auto-execute, throwaway CODEX_HOME), skill github-integration from the worktree (local skill source), GitHub test token connected once by connectGitHubIntegration; macOS 26.5, run shell bash 3.2.57; target AutoByteus/autobyteus-integrations-test and board AutoByteus #1
+# Date: 2026-10-30 (UTC times inside)
+# Command or steps: agent turn: the user's message below; the Codex agent runs it in its shell
+# The run pass is masked as rp_<pass>; the token never appears.
+
+--- user message:
+Run exactly this shell command once, then reply with its full output and exit code:
+
+/Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/check-access.sh; echo "exit=$?"
+$ /bin/bash -lc '/Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/check-access.sh; echo "exit=$?"'
+--- exit: 0
+GitHub access: connected as @ryan-zheng-teki
+exit=0
+
+--- agent reply:
+GitHub access: connected as @ryan-zheng-teki
+exit=0
+

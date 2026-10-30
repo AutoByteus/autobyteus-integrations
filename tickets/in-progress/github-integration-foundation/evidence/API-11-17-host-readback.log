@@ -1,0 +1,25 @@
+# Case: API-11, API-12, API-13, API-15, API-17
+# Commit tested: f9d7f02 (scripts unchanged since 3192aec)
+# Environment: ENV-2: isolated AutoByteus 1.5.11-beta.5 (installed release, /Applications/AutoByteus.app; instance iso-62788-45ad, own data root and vault), Codex runtime (codex-cli 0.166.0, gpt-5.6-luna, auto-execute, throwaway CODEX_HOME), skill github-integration from the worktree (local skill source), GitHub test token connected once by connectGitHubIntegration; macOS 26.5, run shell bash 3.2.57; target AutoByteus/autobyteus-integrations-test and board AutoByteus #1
+# Date: 2026-10-30 (UTC times inside)
+# Command or steps: host read-back with the user's gh login (repo scope), independent of the scripts
+# The run pass is masked as rp_<pass>; the token never appears.
+
+# host read-back with the user's gh login (independent of the scripts), 2026-10-30T13:25:05Z
+## issue 1
+{"body":"Line one with \"double\" and 'single' quotes.\nLine two: $HOME `backticks` and a backslash \\ stay literal.\n\nCreated by the API/E2E live check 20261030132042.","number":1,"state":"open","title":"Live check 20261030132042: issue A \"quoted\"","user":"ryan-zheng-teki"}
+## issue 1 comments
+{"body":"Comment one from stdin.\nSecond line \"quoted\" and $(not run).","id":6523828322,"user":"ryan-zheng-teki"}
+{"body":"Comment two from a file (20261030132042).","id":6523828708,"user":"ryan-zheng-teki"}
+{"body":"Comment three (20261030132042).","id":6523829194,"user":"ryan-zheng-teki"}
+{"body":"Natural-language live check by the agent (20261030132042).","id":6523909235,"user":"ryan-zheng-teki"}
+## pull 2
+{"base":"main","body":"PR body for the live check 20261030132042.\n\n- item \"one\"\n- item two","changed_files":1,"draft":false,"head":"live-check/20261030132042","mergeable":true,"number":2,"state":"open","title":"Live check 20261030132042: PR","user":"ryan-zheng-teki"}
+## pull 2 comments
+{"body":"Comment on the PR (20261030132042).","user":"ryan-zheng-teki"}
+## issue 3
+{"number":3,"state":"closed","title":"Live check 20261030132042: issue B (board)","user":"ryan-zheng-teki"}
+## branch
+{"message":"Live check 20261030132042","name":"live-check/20261030132042","sha":"33bd6d2cc3adaacb5bd224cce195175f48ccb907"}
+## AutoByteus/autobyteus-workspace#2 comments matching 'Should be refused'
+0

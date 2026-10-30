@@ -1,0 +1,40 @@
+# Case: API-18
+# Commit tested: f9d7f02 (scripts unchanged since 3192aec)
+# Environment: ENV-2: isolated AutoByteus 1.5.11-beta.5 (installed release, /Applications/AutoByteus.app; instance iso-62788-45ad, own data root and vault), Codex runtime (codex-cli 0.166.0, gpt-5.6-luna, auto-execute, throwaway CODEX_HOME), skill github-integration from the worktree (local skill source), GitHub test token connected once by connectGitHubIntegration; macOS 26.5, run shell bash 3.2.57; target AutoByteus/autobyteus-integrations-test and board AutoByteus #1
+# Date: 2026-10-30 (UTC times inside)
+# Command or steps: node API-scan-token.mjs <paths> (counts only; positive control: a temp file with the token planted by node was found, filesWithToken 1, then removed); grep of github/scripts for gh auth|GH_TOKEN=|GITHUB_TOKEN|api.github.com|Authorization; summary of <data root>/server-data/integrations/activity.jsonl
+# The run pass is masked as rp_<pass>; the token never appears.
+
+## scan
+{
+ "scannedPaths": [
+  "/tmp/gh-int-live/out",
+  "/private/var/folders/7w/9r4_s1_s42z3f7c136bpjf0r0000gn/T/autobyteus-isolated-root-XpjzNF",
+  "/var/folders/7w/9r4_s1_s42z3f7c136bpjf0r0000gn/T/autobyteus-isolated-app/iso-62788-45ad.log",
+  "/private/tmp/gh-int-live/codex-home.SDDf",
+  "/tmp/gh-int-live/ws",
+  "/tmp/gh-int-live/ws-notick",
+  "/Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation"
+ ],
+ "files": 737,
+ "bytes": 102148954,
+ "skippedSymlinksOrMissing": 1,
+ "filesWithToken": 0,
+ "hits": []
+}
+
+## grep of github/scripts (only a comment matches)
+github/scripts/lib.sh:10:# stores a token, and nothing calls https://api.github.com directly.
+
+## activity.jsonl:       91 records; fields: agentDefinitionId,at,durationMs,error,integrationId,method,path,route,runId,status agentDefinitionId,at,durationMs,integrationId,method,path,route,runId,status 
+## route method status error -> count
+  60 api POST 200 -
+  12 api GET 200 -
+   9 api POST 201 -
+   3 git POST 200 -
+   2 git GET 200 -
+   2 api GET 403 INTEGRATION_NOT_ALLOWED
+   1 api POST 422 -
+   1 api POST 403 -
+   1 api GET 404 -
+## run pass in the instance log: 0 lines
