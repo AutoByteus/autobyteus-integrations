@@ -1,0 +1,12 @@
+# DEL-03 AC-008 'token in no output or log' (method of API-18): node scan-token.mjs <paths> (copy of evidence/API-scan-token.mjs); counts and paths only, never the token
+# Positive control first: a temp file with the token planted by node → {"files":1,"filesWithToken":1}, then removed
+# Scanned: the instance data root (database, vault store, agents, memory, run files, integrations/, temp workspace with the run's skill copy, server logs, Electron data), the instance log, /tmp/gh-int-del (throwaway CODEX_HOME sessions and sqlite, UI driver outputs, screenshots); the auth.json symlink skipped
+{
+  "files": 777,
+  "bytes": 93797350,
+  "skippedSymlinksOrMissing": 4,
+  "filesWithToken": 0,
+  "hits": []
+}
+# Run pass (rp_) lines in the instance log: 0
+# The committed evidence folder: see the delivery report (scanned before commit)

@@ -1,0 +1,68 @@
+# DEL-02 AC-008: the teammate journey on today's released app (DEC-007), same instance as DEL-01
+# Steps in the window: Settings → Server Settings → Basics → GitHub card: token pasted (filled from the owner-private file, never printed) → Save;
+# Agents → Create Agent 'GitHub Teammate Check' (skill github-integration, skill scope configured, no tools) → GitHub card: tick it;
+# Agents → Run → runtime Codex App Server, GPT-5.6-Luna (codex-cli via the throwaway CODEX_HOME), Temp workspace → plain request
+# Fixture: issue AutoByteus/autobyteus-integrations-test#7 created by the tester's host gh login (the test repository had no open issue)
+
+## GitHub card after Save (page text)
+Connected as @ryan-zheng-teki
+Replace token
+Test
+Remove
+Connected since 30.10.2026
+GitHub connected as @ryan-zheng-teki.
+token input value length after Save: 0
+
+## Agent definition read-back
+{"id":"github-teammate-check","name":"GitHub Teammate Check","skillNames":["github-integration"],"skillScope":"CONFIGURED"}
+
+## Card tick (checkboxes) and server state
+[{"id":"github-integration-agent-autobyteus-daily-assistant","checked":false},{"id":"github-integration-agent-github-teammate-check","checked":true}]
+{"data":{"githubIntegration":{"connected":true,"login":"ryan-zheng-teki","connectedAt":"2026-10-30T13:43:46.965Z","agentDefinitionIds":["github-teammate-check"]}}}
+
+## Fixture
+https://github.com/AutoByteus/autobyteus-integrations-test/issues/7
+
+## The agent turn (from the run's raw traces; reasoning and system prompt left out; run pass masked)
+## user (1793367992.381)
+Please list the open issues of AutoByteus/autobyteus-integrations-test, then comment on the issue titled "Delivery check 20261030: teammate journey (AC-008)" with exactly this sentence: Teammate journey check by the agent (delivery 20261030).
+
+## tool_call run_bash (1793367996.891)
+/bin/bash -lc 'cat /private/var/folders/7w/9r4_s1_s42z3f7c136bpjf0r0000gn/T/autobyteus-isolated-root-JWSMC7/server-data/temp_workspace/.codex/skills/github-integration/SKILL.md'
+
+## tool_result run_bash error=null (1793367996.893)
+(SKILL.md content, 6170 characters, omitted)
+
+## tool_call run_bash (1793367998.637)
+/bin/bash -lc 'S=/private/var/folders/7w/9r4_s1_s42z3f7c136bpjf0r0000gn/T/autobyteus-isolated-root-JWSMC7/server-data/temp_workspace/.codex/skills/github-integration/scripts; "$S/check-access.sh" && "$S/issues.sh" list AutoByteus/autobyteus-integrations-test --state open'
+
+## tool_result run_bash error=null (1793368000.51)
+GitHub access: connected as @ryan-zheng-teki
+AutoByteus/autobyteus-integrations-test#7 [open] Delivery check 20261030: teammate journey (AC-008)
+
+
+## tool_call run_bash (1793368003.029)
+/bin/bash -lc "S=/private/var/folders/7w/9r4_s1_s42z3f7c136bpjf0r0000gn/T/autobyteus-isolated-root-JWSMC7/server-data/temp_workspace/.codex/skills/github-integration/scripts; printf '%s\\n' 'Teammate journey check by the agent (delivery 20261030).' | \""'$S/issues.sh" comment AutoByteus/autobyteus-integrations-test#7 --body-file -'
+
+## tool_result run_bash error=null (1793368004.215)
+commented on AutoByteus/autobyteus-integrations-test#7: https://github.com/AutoByteus/autobyteus-integrations-test/issues/7#issuecomment-6524344661
+
+
+## assistant (1793368005.715)
+Open issues:
+- #7 — Delivery check 20261030: teammate journey (AC-008)
+
+Comment added successfully.
+
+## Run's skill copy is the GitHub-installed one: grep -c "only the items the user's token can see" <dataRoot>/server-data/temp_workspace/.codex/skills/github-integration/SKILL.md → 1
+
+## Proxy activity log for this run (<dataRoot>/server-data/integrations/activity.jsonl, all records)
+{"at":"2026-10-30T13:46:39.106Z","runId":"github_teammate_check_f6c5c3a471544404ba9a2ef99d5173c7","agentDefinitionId":"github-teammate-check","integrationId":"github","route":"api","method":"GET","path":"/user","status":200,"durationMs":556}
+{"at":"2026-10-30T13:46:39.928Z","runId":"github_teammate_check_f6c5c3a471544404ba9a2ef99d5173c7","agentDefinitionId":"github-teammate-check","integrationId":"github","route":"api","method":"GET","path":"/repos/AutoByteus/autobyteus-integrations-test/issues","status":200,"durationMs":536}
+{"at":"2026-10-30T13:46:42.940Z","runId":"github_teammate_check_f6c5c3a471544404ba9a2ef99d5173c7","agentDefinitionId":"github-teammate-check","integrationId":"github","route":"api","method":"POST","path":"/repos/AutoByteus/autobyteus-integrations-test/issues/7/comments","status":201,"durationMs":1245}
+
+## Independent read-back (tester's host gh): gh api repos/AutoByteus/autobyteus-integrations-test/issues/7/comments
+[{"author_association":"MEMBER","body":"Teammate journey check by the agent (delivery 20261030).","created_at":"2026-10-30T13:46:43Z","html_url":"https://github.com/AutoByteus/autobyteus-integrations-test/issues/7#issuecomment-6524344661","id":6524344661,"user":"ryan-zheng-teki"}]
+
+## Result: Pass. The agent listed the open issues and commented on #7; the comment is on GitHub, made by the token's account (ryan-zheng-teki) through the proxy (POST …/issues/7/comments 201, 13:46:42.940Z; comment created_at 13:46:43Z). Token in no output or log: DEL-03.
+## Screenshots: DEL-02-github-card-connected.png, DEL-02-agent-ticked.png, DEL-02-agent-turn.png
