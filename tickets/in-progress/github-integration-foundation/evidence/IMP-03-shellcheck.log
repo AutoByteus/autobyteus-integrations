@@ -1,0 +1,4 @@
+# IMP-03 shellcheck -x -P SCRIPTDIR -s bash github/scripts/*.sh tools/check-integrations.sh tests/github/run-tests.sh
+# commit 3192aec; shellcheck version: 0.11.0; 2026-10-30T13:05Z
+
+exit 0

@@ -1,5 +1,6 @@
 # IMP-02 tools/check-integrations.sh on this repository and on bad fixtures
-# base commit 6fa9bbc + uncommitted work tree; macOS 26 /bin/bash 3.2.57, jq 1.7.1; 2026-10-30T13:04Z
+# commit 3192aec; macOS 26.5 /bin/bash 3.2.57, jq 1.7.1; 2026-10-30T13:05Z
+# fixtures: a copy of github/, a docs/ folder (not an integration), and one folder per broken rule (names say which)
 
 $ tools/check-integrations.sh   (this repository)
 ok   github (skill: github-integration)

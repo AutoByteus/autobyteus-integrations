@@ -1,0 +1,30 @@
+# IMP-01 tests/github/run-tests.sh
+# commit 3192aec; macOS 26.5, /bin/bash 3.2.57, curl 8.7.1, jq 1.7.1, Python 3.9.6; 2026-10-30T13:05Z
+
+ok   check-access prints the login and sends no Authorization of its own
+ok   no AUTOBYTEUS_GITHUB_API_URL: says how to give access and stops (REQ-008)
+ok   a missing tool is named and the script stops
+ok   curl cannot connect: unreachable (exit 5)
+ok   issues list leaves out pull requests and applies --limit after that, across pages
+ok   issues list with no issues says so
+ok   issues read shows the issue and its last comments
+ok   issues read takes the last comments across the last two pages
+ok   issues create sends title and body as JSON, text kept exactly
+ok   issues comment reads the body from stdin
+ok   usage errors exit 2 and send nothing
+ok   pulls list shows state and head -> base
+ok   pulls read shows branches, mergeable and changed files
+ok   pulls open sends head, base, title, body and draft
+ok   board items lists items with their status; --status matches case-insensitively
+ok   board move: item already on the board
+ok   board move: item not on the board is added first, and the output says so
+ok   board move: an unknown status lists the valid ones and changes nothing
+ok   Rule 1: a GitHub body that merely contains the word error is GitHub's answer
+ok   Rule 2: each proxy refusal gives its next step and exit code
+ok   Rule 3: GitHub's REST status 401 / 403 / 404 / 422 / 5xx
+ok   Rule 4: a GraphQL 200 with errors is a refusal, never a success; GraphQL 401 follows rule 3
+ok   no request carried a token or an Authorization header; no output shows the sentinel
+ok   the scripts name no token variable, no gh login and no direct GitHub address
+
+24 passed, 0 failed
+exit 0
