@@ -28,7 +28,8 @@ Delivery added one sentence to `github/SKILL.md`: a board listing shows only the
 | AC-002 | Proven | IMP-02 / API-02 |
 | AC-003, AC-004, AC-005, AC-006 | Proven live through the real proxy on released 1.5.11-beta.5 | API-10…API-18 |
 | AC-007 | Proven (review) | CRR-001 |
-| AC-001, AC-008 | Delivery, after finalization on `main` (DEC-007) | See `release-deployment-report.md` |
+| AC-001 | Proven after finalization: released 1.5.11-beta.5, isolated instance; the public URL imported as a GitHub skill source, `github-integration` listed, "Up to date", imported tree = `main` `63b407a` | `evidence/DEL-01-*` |
+| AC-008 | Proven: GitHub card connected (@ryan-zheng-teki), agent with `github-integration` ticked, Codex run listed the open issues and commented on `AutoByteus/autobyteus-integrations-test#7`; the comment is on GitHub by the token's account; the token is in none of 777 scanned files | `evidence/DEL-02-*`, `DEL-03-*` |
 | AC-009 | This ticket's final round, after autobyteus-337 | Not this round |
 
 ## Open Items

@@ -1,0 +1,37 @@
+# DEL-01 AC-001: a teammate's isolated instance of the released app adds the integrations repository as a GitHub skill source
+# 2026-10-30T13:4xZ; macOS 26.5 arm64; /Applications/AutoByteus.app 1.5.11-beta.5 (latest release; ≥ v1.5.11-beta.4)
+# Instance: pnpm --silent isolated-app start --app /Applications/AutoByteus.app (CODEX_HOME=<throwaway>), own data root and vault
+# Repository: https://github.com/AutoByteus/autobyteus-integrations (PUBLIC, default branch main = 63b407a after finalization)
+# Driven through the window over CDP (playwright-core connectOverCDP, attach only): Skills → Sources → paste URL → Add
+
+## isolated-app start result (paths only)
+{"instanceId":"iso-65158-8899","executablePath":"/Applications/AutoByteus.app/Contents/MacOS/AutoByteus","backendUrl":"http://127.0.0.1:65159","controlPort":65158}
+
+## Before: Skills page
+No skills created yet
+
+## Manage Skill Sources after Add (page text)
+AutoByteus/autobyteus-integrations
+1 skill
+GitHub
+https://github.com/AutoByteus/autobyteus-integrations
+Up to date
+
+Source is available. Skills list refreshed.
+
+## Skills page after Add (page text)
+github-integration
+
+Work with GitHub issues, pull requests and Projects boards through the user's AutoByteus GitHub connection. Use when a task needs to list, read, create or comment on issues, read or open pull requests, push a branch, or move an item on a Projects board.
+
+7 files
+
+## GraphQL read-back: query { skills { name rootPath isDisabled } }
+{"name":"github-integration","isDisabled":false,"rootPath":"<dataRoot>/server-data/skill-sources/github/1a0ae815-b5af-404f-930d-901fb07dd624/generations/e5a9c024-1473-4669-8ccb-26beafd3a1fd/repository/github"}
+
+## The imported tree is today's main
+$ git archive 63b407a | tar -x -C main-tree; diff -rq main-tree <dataRoot>/server-data/skill-sources/github/<id>/generations/<gen>/repository
+installed tree == main 63b407a   (no differences; includes the delivery's SKILL.md sentence, line 56)
+
+## Result: Pass. Import succeeded, github-integration listed, source 'Up to date'. No clash, no 'no valid skills'.
+## Screenshot: DEL-01-skill-source-added.png
