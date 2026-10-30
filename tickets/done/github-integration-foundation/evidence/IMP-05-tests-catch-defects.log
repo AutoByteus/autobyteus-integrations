@@ -1,0 +1,27 @@
+# IMP-05 the tests catch broken code: tests/github/run-tests.sh against copies of github/ with one deliberate defect each
+# commit 3192aec; macOS 26.5 /bin/bash 3.2.57; 2026-10-30T13:06Z
+
+== pull requests not filtered from issues list (github/scripts/issues.sh)
+  FAIL [issues list leaves out pull requests and applies --limit after that, across pages] stdout is:
+  FAIL [issues list leaves out pull requests and applies --limit after that, across pages] requests were:
+23 passed, 1 failed
+== Rule 4 removed (GraphQL errors) (github/scripts/lib.sh)
+  FAIL [Rule 4: a GraphQL 200 with errors is a refusal, never a success; GraphQL 401 follows rule 3] stderr lacks: GitHub refused the GraphQL request: (stderr: No board number 1 of o was found.
+  FAIL [Rule 4: a GraphQL 200 with errors is a refusal, never a success; GraphQL 401 follows rule 3] stderr lacks: - Resource not accessible by personal access token (FORBIDDEN) (stderr: No board numb
+  FAIL [Rule 4: a GraphQL 200 with errors is a refusal, never a success; GraphQL 401 follows rule 3] stderr lacks: - second problem (stderr: No board number 1 of o was found.
+23 passed, 1 failed
+== Rule 1 loosened (any error field = proxy) (github/scripts/lib.sh)
+  FAIL [Rule 1: a GitHub body that merely contains the word error is GitHub's answer] stderr lacks: GitHub answered HTTP 403 for GET /user: Forbidden (stderr: AutoByteus refused GET /user (Some error)
+  FAIL [Rule 1: a GitHub body that merely contains the word error is GitHub's answer] stderr has: AutoByteus refused
+23 passed, 1 failed
+== script sends GH_TOKEN (github/scripts/lib.sh)
+  FAIL [check-access prints the login and sends no Authorization of its own] an Authorization header was sent
+  FAIL [no request carried a token or an Authorization header; no output shows the sentinel] a request carried an Authorization header
+  FAIL [no request carried a token or an Authorization header; no output shows the sentinel] a request carried the token variable's value
+21 passed, 3 failed
+== add-then-move not reported (github/scripts/board.sh)
+  FAIL [board move: item not on the board is added first, and the output says so] stdout is:
+23 passed, 1 failed
+== NOT_LOOPBACK exit code changed (github/scripts/lib.sh)
+  FAIL [Rule 2: each proxy refusal gives its next step and exit code] exit 4, expected 3 (stderr: AutoByteus refused GET /user (NOT_LOOPBACK): proxy says NOT_LOOPBACK
+23 passed, 1 failed

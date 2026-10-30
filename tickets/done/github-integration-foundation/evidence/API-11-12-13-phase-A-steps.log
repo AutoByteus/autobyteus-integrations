@@ -1,0 +1,229 @@
+# Case: API-11, API-12, API-13
+# Commit tested: f9d7f02 (scripts unchanged since 3192aec)
+# Environment: ENV-2: isolated AutoByteus 1.5.11-beta.5 (installed release, /Applications/AutoByteus.app; instance iso-62788-45ad, own data root and vault), Codex runtime (codex-cli 0.166.0, gpt-5.6-luna, auto-execute, throwaway CODEX_HOME), skill github-integration from the worktree (local skill source), GitHub test token connected once by connectGitHubIntegration; macOS 26.5, run shell bash 3.2.57; target AutoByteus/autobyteus-integrations-test and board AutoByteus #1
+# Date: 2026-10-30 (UTC times inside)
+# Command or steps: agent turn: 'bash driver.sh A <out>' (driver: API-live-driver.sh, phase A), run by the agent in its shell
+# The run pass is masked as rp_<pass>; the token never appears.
+
+# driver phase A, 2026-10-30T13:20:42Z, shell: bash 3.2.57(1)-release, Darwin arm64
+# AUTOBYTEUS_GITHUB_API_URL=http://127.0.0.1:62846/r/rp_<pass>/github/api
+# GIT_CONFIG_COUNT=1 GIT_TERMINAL_PROMPT=0
+# GIT_CONFIG_KEY_0=url.http://127.0.0.1:62846/r/rp_<pass>/github/git/.insteadOf GIT_CONFIG_VALUE_0=https://github.com/
+
+=== A01 check-access
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/check-access.sh
+--- exit: 0
+--- stdout:
+GitHub access: connected as @ryan-zheng-teki
+--- stderr:
+
+=== A02 issues create (quotes, newlines, from a file)
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/issues.sh create AutoByteus/autobyteus-integrations-test --title Live check 20261030132042: issue A "quoted" --body-file /tmp/gh-int-live/out/A/body-a.md
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#1 https://github.com/AutoByteus/autobyteus-integrations-test/issues/1
+--- stderr:
+
+=== A03 issues comment --body-file -
+$ printf '%s' <stdin below> | /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/issues.sh comment AutoByteus/autobyteus-integrations-test#1 --body-file -
+--- stdin:
+Comment one from stdin.
+Second line "quoted" and $(not run).
+--- exit: 0
+--- stdout:
+commented on AutoByteus/autobyteus-integrations-test#1: https://github.com/AutoByteus/autobyteus-integrations-test/issues/1#issuecomment-6523828322
+--- stderr:
+
+=== A04 issues comment --body-file FILE
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/issues.sh comment AutoByteus/autobyteus-integrations-test#1 --body-file /tmp/gh-int-live/out/A/comment-2.md
+--- exit: 0
+--- stdout:
+commented on AutoByteus/autobyteus-integrations-test#1: https://github.com/AutoByteus/autobyteus-integrations-test/issues/1#issuecomment-6523828708
+--- stderr:
+
+=== A05 issues comment (third)
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/issues.sh comment AutoByteus/autobyteus-integrations-test#1 --body-file /tmp/gh-int-live/out/A/comment-3.md
+--- exit: 0
+--- stdout:
+commented on AutoByteus/autobyteus-integrations-test#1: https://github.com/AutoByteus/autobyteus-integrations-test/issues/1#issuecomment-6523829194
+--- stderr:
+
+=== A06 issues read --comments 2
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/issues.sh read AutoByteus/autobyteus-integrations-test#1 --comments 2
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#1 [open] Live check 20261030132042: issue A "quoted"
+author: @ryan-zheng-teki
+url: https://github.com/AutoByteus/autobyteus-integrations-test/issues/1
+
+Line one with "double" and 'single' quotes.
+Line two: $HOME `backticks` and a backslash \ stay literal.
+
+Created by the API/E2E live check 20261030132042.
+
+--- comments (last 2 of 3) ---
+
+@ryan-zheng-teki at 2026-10-30T13:20:45Z:
+Comment two from a file (20261030132042).
+
+@ryan-zheng-teki at 2026-10-30T13:20:47Z:
+Comment three (20261030132042).
+--- stderr:
+
+=== A07 git clone https URL
+$ git clone -q https://github.com/AutoByteus/autobyteus-integrations-test.git /tmp/gh-int-live/out/A/clone
+--- exit: 0
+--- stdout:
+--- stderr:
+
+=== A08 git remote (unchanged https URL)
+$ git -C /tmp/gh-int-live/out/A/clone remote get-url origin
+--- exit: 0
+--- stdout:
+http://127.0.0.1:62846/r/rp_<pass>/github/git/AutoByteus/autobyteus-integrations-test.git
+--- stderr:
+
+=== A09 git push -u origin BRANCH
+$ git -C /tmp/gh-int-live/out/A/clone push -u origin live-check/20261030132042
+--- exit: 0
+--- stdout:
+branch 'live-check/20261030132042' set up to track 'origin/live-check/20261030132042'.
+--- stderr:
+remote: 
+remote: Create a pull request for 'live-check/20261030132042' on GitHub by visiting:        
+remote:      https://github.com/AutoByteus/autobyteus-integrations-test/pull/new/live-check/20261030132042        
+remote: 
+To http://127.0.0.1:62846/r/rp_<pass>/github/git/AutoByteus/autobyteus-integrations-test.git
+ * [new branch]      live-check/20261030132042 -> live-check/20261030132042
+
+=== A10 pulls open
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/pulls.sh open AutoByteus/autobyteus-integrations-test --head live-check/20261030132042 --base main --title Live check 20261030132042: PR --body-file /tmp/gh-int-live/out/A/pr.md
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#2 https://github.com/AutoByteus/autobyteus-integrations-test/pull/2
+--- stderr:
+
+=== A11 pulls read
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/pulls.sh read AutoByteus/autobyteus-integrations-test#2
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#2 [open] Live check 20261030132042: PR
+author: @ryan-zheng-teki
+branches: live-check/20261030132042 → main
+mergeable: unknown (GitHub is still checking; read again shortly)
+url: https://github.com/AutoByteus/autobyteus-integrations-test/pull/2
+
+changed files (1):
+  +1 -0 live-check-20261030132042.txt
+
+PR body for the live check 20261030132042.
+
+- item "one"
+- item two
+--- stderr:
+
+=== A12 pulls list
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/pulls.sh list AutoByteus/autobyteus-integrations-test
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#2 [open] Live check 20261030132042: PR (live-check/20261030132042 → main)
+--- stderr:
+
+=== A13 pulls open --head missing branch (expect 422, exit 4)
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/pulls.sh open AutoByteus/autobyteus-integrations-test --head does-not-exist-20261030132042 --base main --title Should fail --body-file /tmp/gh-int-live/out/A/pr.md
+--- exit: 4
+--- stdout:
+--- stderr:
+GitHub answered HTTP 422 for POST /repos/AutoByteus/autobyteus-integrations-test/pulls: Validation Failed
+- PullRequest head invalid
+
+=== A14 issues comment on the PR
+$ printf '%s' <stdin below> | /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/issues.sh comment AutoByteus/autobyteus-integrations-test#2 --body-file -
+--- stdin:
+Comment on the PR (20261030132042).
+--- exit: 0
+--- stdout:
+commented on AutoByteus/autobyteus-integrations-test#2: https://github.com/AutoByteus/autobyteus-integrations-test/pull/2#issuecomment-6523832352
+--- stderr:
+
+=== A15 issues list (open; the open PR must not appear)
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/issues.sh list AutoByteus/autobyteus-integrations-test
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#1 [open] Live check 20261030132042: issue A "quoted"
+--- stderr:
+
+=== A16 issues list --state all --limit 1
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/issues.sh list AutoByteus/autobyteus-integrations-test --state all --limit 1
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#1 [open] Live check 20261030132042: issue A "quoted"
+--- stderr:
+
+=== A17 issues create (issue B, for the board)
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/issues.sh create AutoByteus/autobyteus-integrations-test --title Live check 20261030132042: issue B (board) --body-file /tmp/gh-int-live/out/A/body-b.md
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#3 https://github.com/AutoByteus/autobyteus-integrations-test/issues/3
+--- stderr:
+
+=== A18 board move B (not on the board) In Progress
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh move AutoByteus/autobyteus-integrations-test#3 --owner AutoByteus --number 1 --status In Progress
+--- exit: 0
+--- stdout:
+added AutoByteus/autobyteus-integrations-test#3 to the board; moved to In Progress
+--- stderr:
+
+=== A19 board items --status 'in progress'
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 1 --status in progress
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#3 [In Progress] Live check 20261030132042: issue B (board)
+--- stderr:
+
+=== A20 board move B --status done (other spelling)
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh move AutoByteus/autobyteus-integrations-test#3 --owner AutoByteus --number 1 --status done
+--- exit: 0
+--- stdout:
+moved AutoByteus/autobyteus-integrations-test#3 to Done
+--- stderr:
+
+=== A21 board move PR --status todo
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh move AutoByteus/autobyteus-integrations-test#2 --owner AutoByteus --number 1 --status todo
+--- exit: 0
+--- stdout:
+added AutoByteus/autobyteus-integrations-test#2 to the board; moved to Todo
+--- stderr:
+
+=== A22 board items
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 1
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#3 [Done] Live check 20261030132042: issue B (board)
+--- stderr:
+
+=== A23 board items --status DONE
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 1 --status DONE
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#3 [Done] Live check 20261030132042: issue B (board)
+--- stderr:
+
+=== A24 board move unknown status (expect exit 2 with the names)
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh move AutoByteus/autobyteus-integrations-test#3 --owner AutoByteus --number 1 --status Blocked
+--- exit: 2
+--- stdout:
+--- stderr:
+unknown status "Blocked"; the board's statuses are: Todo, In Progress, Done
+usage:
+  board.sh items --owner LOGIN --number P [--status NAME]
+  board.sh move OWNER/REPO#N --owner LOGIN --number P --status NAME
+LOGIN is the user or organisation that owns the board; P is the board's number.
+
+=== A25 raw GraphQL board read-back (not board.sh)
+$ raw_board
+--- exit: 0
+--- stdout:
+{"data":{"organization":{"projectV2":{"title":"AutoByteus Integrations Test Board","items":{"nodes":[{"id":"PVTI_lADOB-mU1M4BpcaHzhExqmw","type":"ISSUE","isArchived":false,"content":{"__typename":"Issue","number":3,"title":"Live check 20261030132042: issue B (board)","repository":{"nameWithOwner":"AutoByteus/autobyteus-integrations-test"}},"fieldValueByName":{"name":"Done"}},{"id":"PVTI_lADOB-mU1M4BpcaHzhExqwM","type":"PULL_REQUEST","isArchived":false,"content":{"__typename":"PullRequest","number":2,"title":"Live check 20261030132042: PR","repository":{"nameWithOwner":"AutoByteus/autobyteus-integrations-test"}},"fieldValueByName":{"name":"Todo"}}]}}}}}
+--- stderr:
+

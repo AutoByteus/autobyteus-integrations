@@ -1,0 +1,8 @@
+{
+  "name": "GitHub",
+  "description": "Work with GitHub issues, pull requests and Projects boards. Your token stays in AutoByteus.",
+  "token": {
+    "help": "Create a fine-grained token at https://github.com/settings/personal-access-tokens/new, limited to the repositories your agents work on, with Issues, Pull requests and Contents read and write (and the organisation's Projects read and write for a board). A board owned by a personal account needs a classic token with the repo and project scopes."
+  },
+  "prerequisites": ["curl", "jq", "git"]
+}

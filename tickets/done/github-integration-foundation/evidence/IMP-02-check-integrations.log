@@ -1,0 +1,25 @@
+# IMP-02 tools/check-integrations.sh on this repository and on bad fixtures
+# commit 3192aec; macOS 26.5 /bin/bash 3.2.57, jq 1.7.1; 2026-10-30T13:05Z
+# fixtures: a copy of github/, a docs/ folder (not an integration), and one folder per broken rule (names say which)
+
+$ tools/check-integrations.sh   (this repository)
+ok   github (skill: github-integration)
+all 1 integration folder(s) pass
+exit 0
+
+$ tools/check-integrations.sh <fixtures>
+FAIL Bad_Name: the folder name is not a valid integration ID (^[a-z][a-z0-9-]*$)
+FAIL bad-json: integration.json is not valid JSON
+ok   github (skill: github-integration)
+ok   minimal (skill: minimal-skill)
+FAIL missing-desc: integration.json: missing required field: description
+FAIL no-name: SKILL.md has no name in its front matter
+FAIL only-manifest: has integration.json but no SKILL.md
+FAIL only-skill: has SKILL.md but no integration.json
+FAIL prereq-bad: integration.json: prerequisites must be an array of tool names
+FAIL secret: integration.json: a value looks like a secret (no secret may be in a manifest)
+FAIL token-extra: integration.json: unknown field: token.hosts
+FAIL token-no-help: integration.json: missing required field: token.help
+FAIL unknown-field: integration.json: unknown field: version
+11 problem(s) in 13 integration folder(s)
+exit 1

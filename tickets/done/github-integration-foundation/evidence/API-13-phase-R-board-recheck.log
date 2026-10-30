@@ -1,0 +1,34 @@
+# Case: API-13
+# Commit tested: f9d7f02 (scripts unchanged since 3192aec)
+# Environment: ENV-2: isolated AutoByteus 1.5.11-beta.5 (installed release, /Applications/AutoByteus.app; instance iso-62788-45ad, own data root and vault), Codex runtime (codex-cli 0.166.0, gpt-5.6-luna, auto-execute, throwaway CODEX_HOME), skill github-integration from the worktree (local skill source), GitHub test token connected once by connectGitHubIntegration; macOS 26.5, run shell bash 3.2.57; target AutoByteus/autobyteus-integrations-test and board AutoByteus #1
+# Date: 2026-10-30 (UTC times inside)
+# Command or steps: agent turn: driver phase R (recheck of A22, about 30 s later)
+# The run pass is masked as rp_<pass>; the token never appears.
+
+# driver phase R, 2026-10-30T13:21:46Z, shell: bash 3.2.57(1)-release, Darwin arm64
+# AUTOBYTEUS_GITHUB_API_URL=http://127.0.0.1:62846/r/rp_<pass>/github/api
+# GIT_CONFIG_COUNT=1 GIT_TERMINAL_PROMPT=0
+# GIT_CONFIG_KEY_0=url.http://127.0.0.1:62846/r/rp_<pass>/github/git/.insteadOf GIT_CONFIG_VALUE_0=https://github.com/
+
+=== R01 board items
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 1
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#3 [Done] Live check 20261030132042: issue B (board)
+AutoByteus/autobyteus-integrations-test#2 [Todo] Live check 20261030132042: PR
+--- stderr:
+
+=== R02 board items --status todo
+$ /Users/normy/autobyteus_org/autobyteus-worktrees/github-integration-foundation/github/scripts/board.sh items --owner AutoByteus --number 1 --status todo
+--- exit: 0
+--- stdout:
+AutoByteus/autobyteus-integrations-test#2 [Todo] Live check 20261030132042: PR
+--- stderr:
+
+=== R03 raw GraphQL board read-back (not board.sh)
+$ raw_board
+--- exit: 0
+--- stdout:
+{"data":{"organization":{"projectV2":{"title":"AutoByteus Integrations Test Board","items":{"nodes":[{"id":"PVTI_lADOB-mU1M4BpcaHzhExqmw","type":"ISSUE","isArchived":false,"content":{"__typename":"Issue","number":3,"title":"Live check 20261030132042: issue B (board)","repository":{"nameWithOwner":"AutoByteus/autobyteus-integrations-test"}},"fieldValueByName":{"name":"Done"}},{"id":"PVTI_lADOB-mU1M4BpcaHzhExqwM","type":"PULL_REQUEST","isArchived":false,"content":{"__typename":"PullRequest","number":2,"title":"Live check 20261030132042: PR","repository":{"nameWithOwner":"AutoByteus/autobyteus-integrations-test"}},"fieldValueByName":{"name":"Todo"}}]}}}}}
+--- stderr:
+
