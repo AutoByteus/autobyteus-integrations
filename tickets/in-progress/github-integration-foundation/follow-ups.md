@@ -1,0 +1,5 @@
+# Follow-ups — github-integration-foundation (autobyteus-integrations-1)
+
+| ID | Found by (role, document) | What is wrong, where | Evidence | Why it is outside this ticket | Urgent (`Yes`/`No`) | Suggested Task description | Sent (to, date) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| FU-001 | Solution Designer, investigation-notes.md (RSK-002) | On this node `gh` is logged in from the keyring with the user's broad token (scopes `repo`, `workflow`, `read:org`, `gist`). Any agent with a shell can use it and print it with `gh auth token`, bypassing the proxy | `gh auth status` (token masked), 2026-10-30; 244 V6 (`auth token` prints the token) | The user's machine setup, not the integration; the integration's skill already forbids the ambient login (REQ-008) | Yes (security) | Tell the user; recommend `gh auth logout` on nodes where agents run once the GitHub card is connected, or decide whether agent shells should get an empty `GH_CONFIG_DIR` (with autobyteus-219, what agent shells inherit) | |
