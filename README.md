@@ -14,16 +14,16 @@ Integrations connect AutoByteus agents to outside services, such as GitHub, Jira
 
 ## Installing
 
-Needs AutoByteus `v1.5.11-beta.4` or later, and on the machine running the agents: `curl`, `jq` and `git`.
+Needs an AutoByteus with the Integrations page (the release after `v1.5.11-beta.4`), and on the machine running the agents: `curl`, `jq` and `git`.
 
-1. **Add this repository as a skill source.** In AutoByteus: Skills → Manage skill sources → add `https://github.com/AutoByteus/autobyteus-integrations`. AutoByteus checks it for updates.
-2. **Connect GitHub.** Settings → Server Settings → Basics → the GitHub card: paste a GitHub token (the card says what to grant it; a fine-grained token limited to the repositories your agents work on is recommended), then tick the agents that may use GitHub.
-3. **Give the skill to those agents.** Add `github-integration` to each ticked agent's skills.
+1. **Import this repository.** In AutoByteus: Integrations → **Import** → paste `https://github.com/AutoByteus/autobyteus-integrations` (or the path of a local copy of this repository) → Import. Each integration in it appears as a card, and its skill joins your skills. AutoByteus checks a GitHub import for updates; **Manage sources** updates or removes it.
+2. **Connect GitHub.** On the GitHub card: **Connect** → paste a GitHub token (the card says what to grant it; a fine-grained token limited to the repositories your agents work on is recommended) → Connect. AutoByteus checks the token with GitHub and keeps it in its vault.
+3. **Give the skill to an agent.** Add `github-integration` to the agent's skills, as with any skill (an agent set to all installed skills already has it). Only agents with the skill can use GitHub.
 4. **Give the agent a shell.** The agent needs a terminal tool (AutoByteus runtime), or on Codex a sandbox other than `read-only`.
 
 Start a new run of the agent; it can then check its access with the skill's `check-access.sh`. To push branches, use the `https://github.com/OWNER/REPO.git` URL: an SSH remote does not go through AutoByteus.
 
-These steps will move to a coming Integrations page in AutoByteus (AutoByteus Task autobyteus-337), where each integration has its own card; this README will be updated then.
+Removing this source (Manage sources → Remove, or on the Skills page) also removes your GitHub connection.
 
 ## Repository checks
 
