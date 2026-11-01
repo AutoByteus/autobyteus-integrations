@@ -14,7 +14,7 @@ Integrations connect AutoByteus agents to outside services, such as GitHub, Jira
 
 ## Installing
 
-Needs an AutoByteus with the Integrations page (the release after `v1.5.11-beta.4`), and on the machine running the agents: `curl`, `jq` and `git`.
+Needs an AutoByteus version that has the **Integrations** page (main menu → Integrations; `v1.5.11-beta.9` and earlier don't have it), and on the machine running the agents: `curl`, `jq` and `git`.
 
 1. **Import this repository.** In AutoByteus: Integrations → **Import** → paste `https://github.com/AutoByteus/autobyteus-integrations` (or the path of a local copy of this repository) → Import. Each integration in it appears as a card, and its skill joins your skills. AutoByteus checks a GitHub import for updates; **Manage sources** updates or removes it.
 2. **Connect GitHub.** On the GitHub card: **Connect** → paste a GitHub token (the card says what to grant it; a fine-grained token limited to the repositories your agents work on is recommended) → Connect. AutoByteus checks the token with GitHub and keeps it in its vault.
